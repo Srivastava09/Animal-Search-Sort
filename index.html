@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Search and Sort</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #008080;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        li {
+            margin: 10px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: calc(33.33% - 20px);
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Animal Search and Sort</h1>
+
+    <label for="search">Search by Name:</label>
+    <input type="text" id="search" oninput="updateList()">
+    
+    <label for="sort">Sort by Type:</label>
+    <select id="sort" onchange="updateList()">
+        <option value="all">All</option>
+        <option value="herbivore">Herbivores</option>
+        <option value="carnivore">Carnivores</option>
+        <option value="omnivore">Omnivores</option>
+    </select>
+
+    <label for="showImages">Show Online Images:</label>
+    <input type="checkbox" id="showImages" onchange="updateList()">
+
+    <ul id="animalList">
+        
+    </ul>
+
+    <script>
+        
+        const animals = [
+            { name: 'Elephant', type: 'herbivore' },
+            { name: 'Lion', type: 'carnivore' },
+            { name: 'Giraffe', type: 'herbivore' },
+            { name: 'Tiger', type: 'carnivore' },
+            { name: 'Bear', type: 'omnivore' },
+            
+        ];
+
+        
+        function renderAnimalList(animalsToShow) {
+            const animalList = document.getElementById('animalList');
+            animalList.innerHTML = ''; 
+
+            animalsToShow.forEach(animal => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <p>${animal.name}</p>
+                    <p>${animal.type}</p>
+                    ${document.getElementById('showImages').checked ? `<img src="https://source.unsplash.com/200x200/?${animal.name}" alt="${animal.name}">` : ''}
+                `;
+                animalList.appendChild(li);
+            });
+        }
+
+        
+        function updateList() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const sortType = document.getElementById('sort').value;
+
+            let filteredAnimals = animals;
+            
+            if (searchTerm) {
+                filteredAnimals = filteredAnimals.filter(animal => animal.name.toLowerCase().includes(searchTerm));
+            }
+
+            if (sortType !== 'all') {
+                filteredAnimals = filteredAnimals.filter(animal => animal.type === sortType);
+            }
+
+            renderAnimalList(filteredAnimals);
+        }
+
+        
+        renderAnimalList(animals);
+    </script>
+
+</body>
+</html>
